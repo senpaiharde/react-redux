@@ -1,0 +1,216 @@
+/* General Task List Container */
+.task-list-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, color 0.3s;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/*  Button Styling */
+button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/*  Loading Animation */
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/*  Fade-In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/*  Fade-Out Animation */
+.fade-out {
+    animation: fadeOut 0.4s ease-in-out;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
+}
+
+/*  Task Form */
+.task-form {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.task-form input,
+.task-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/*  Task Item */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background 0.3s ease, transform 0.3s ease;
+    animation: slideIn 0.4s ease;
+}
+
+/*  Slide In Animation */
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* red Low Progress (0-30%) */
+.task-low-progress {
+    background-color: #ec4444;
+}
+
+/* yellow Medium Progress (30-70%) */
+.task-medium-progress {
+    background-color: #f3c408;
+}
+
+/* green High Progress (70-100%) */
+.task-high-progress {
+    background-color: #6dd66d;
+}
+
+/*  Completed Tasks */
+.task-completed {
+    background-color: #6dd66d;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/*  Progress Bar */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+progress {
+    flex-grow: 1;
+    height: 15px;
+    border-radius: 8px;
+    background: #eee;
+    border: none;
+}
+
+progress::-webkit-progress-bar {
+    background: #ddd;
+    border-radius: 8px;
+}
+
+progress::-webkit-progress-value {
+    background: #007bff;
+    border-radius: 8px;
+    transition: width 0.3s ease;
+}
+
+/*  Progress Text */
+.progress-text {
+    font-weight: bold;
+    color: #333;
+}
+
+/*  Task Board */
+.task-board {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/*  Task Columns */
+.task-column {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    min-height: 300px;
+    transition: background 0.3s ease;
+}
+
+/*  Task Filters */
+.task-filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/*  Add Task Button */
+.add-task-button {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.add-task-button:hover {
+    background: #218838;
+}
+
+/*  Blur Effect for Filtering */
+.task-item.blur {
+    opacity: 0.4;
+    filter: blur(3px);
+}
+
+/* Dark Mode Support */
+.dark-theme {
+    --bg-color: #1e1e1e;
+    --text-color: white;
+}
+
+
+

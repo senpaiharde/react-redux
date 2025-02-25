@@ -1,0 +1,40 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.app-container{
+    display: flex;
+    justify-content: space-between;
+    background: #222;
+    padding: 10px;
+
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+
+}
+
+.navbar .active-link {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+
+  button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background: #0056b3;
+  }

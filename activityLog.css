@@ -1,0 +1,41 @@
+.activity-log {
+    background: var(--log-bg, #1e1e1e); /* Dark Mode Default */
+    color: var(--log-text, white);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-size: 14px;
+    margin: auto;
+    text-align: left;
+}
+
+.activity-log h3 {
+    text-align: center;
+    font-weight: bold;
+    color: var(--log-heading, #ffcc00); /* Gold for contrast */
+    margin-bottom: 10px;
+}
+
+.activity-log ul {
+    list-style: none;
+    padding: 0;
+}
+
+.activity-log li {
+    background: var(--log-item-bg, #292929);
+    border-left: 5px solid var(--log-border, #ffcc00);
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+.activity-log li:hover {
+    background: var(--log-hover-bg, #444);
+    transform: scale(1.02);
+}
