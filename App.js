@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import TaskList from "./components/TaskList";
 import Shop from "./components/Shop";
 import Navbar from "./components/Navbar";
+import Signup from './components/Signup';
 
 
 const App = () => {
@@ -17,6 +18,8 @@ const App = () => {
         <Navbar />
         <Routes> 
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<Signup />} />
           <Route 
             path="/tasks" 
             element={<ProtectedRoute isAuthenticated={isAuthenticated}><TaskList /></ProtectedRoute>} 

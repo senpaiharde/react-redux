@@ -1,41 +1,92 @@
+/* Activity Log Container */
 .activity-log {
-    background: var(--log-bg, #1e1e1e); /* Dark Mode Default */
-    color: var(--log-text, white);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    max-height: 250px;
-    overflow-y: auto;
+    width: 100%;
+    max-width: 380px;
+    background: var(--log-bg);
+    color: var(--log-text);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
     font-size: 14px;
-    margin: auto;
-    text-align: left;
+    animation: fadeIn 0.4s ease-in-out;
 }
 
-.activity-log h3 {
-    text-align: center;
+/* Header with Toggle */
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: bold;
-    color: var(--log-heading, #ffcc00); /* Gold for contrast */
-    margin-bottom: 10px;
+    padding-bottom: 5px;
 }
 
-.activity-log ul {
-    list-style: none;
-    padding: 0;
+/* Toggle Button */
+.toggle-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--log-text);
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+.toggle-button:hover {
+    transform: scale(1.1);
 }
 
-.activity-log li {
-    background: var(--log-item-bg, #292929);
-    border-left: 5px solid var(--log-border, #ffcc00);
-    padding: 10px;
-    margin-bottom: 5px;
+/* Filters */
+.filters {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+.filters input {
+    flex: 1;
+    padding: 4px;
+    border: 1px solid var(--log-border);
     border-radius: 5px;
+    background: var(--log-bg);
+    color: var(--log-text);
+}
+
+/* Clear Button */
+.clear-log-button {
+    background: red;
     color: white;
-    font-size: 14px;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
     transition: all 0.3s ease-in-out;
 }
+.clear-log-button:hover {
+    background: darkred;
+}
 
-.activity-log li:hover {
-    background: var(--log-hover-bg, #444);
-    transform: scale(1.02);
+/* Activity List */
+ul {
+    text-align: center;
+    list-style: none;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+/* Activity Items */
+.activity-log li {
+    background: var(--log-item-bg);
+    padding: 6px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: all 0.3s ease-in-out;
+    animation: fadeIn 0.4s forwards;
+}
+
+/* No Activity */
+.empty-log {
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.7;
 }

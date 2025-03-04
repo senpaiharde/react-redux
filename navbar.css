@@ -1,13 +1,183 @@
+/* 🌐 Navbar Layout */
 .navbar {
     display: flex;
-    justify-content: space-around;
-    padding: 15px;
-    background: #282c34;
-    color:white;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
-.navbar a {
-    color:white;
-    text-decoration: none;
+
+/* 📌 Left Section (Tasks & Shop) */
+.nav-left {
+    display: flex;
+    gap: 12px;
+}
+
+/* 📋 Tasks & 🛒 Shop Buttons */
+.nav-left a {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 14px;
     font-weight: bold;
+    text-align: center;
+    color: var(--button-text);
+    background-color: var(--button-bg);
+    border: 2px solid var(--button-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🔥 Hover Effect */
+.nav-left a:hover {
+    background-color: var(--button-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 🎯 Active (Current Page) Effect */
+.nav-left a.active {
+    background-color: var(--button-active);
+    color: white;
+    border-color: var(--button-active-border);
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌙 Dark Mode */
+.dark-theme .nav-left a {
+    background-color: var(--button-dark-bg);
+    border-color: var(--button-dark-border);
+}
+
+.dark-theme .nav-left a:hover {
+    background-color: var(--button-dark-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .nav-left a.active {
+    background-color: var(--button-dark-active);
+    border-color: var(--button-dark-active-border);
+    box-shadow: inset 0px 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+
+/* 🌟 Progress Bar in Header */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 250px;
+    padding: 5px;
+}
+
+.progress-container progress {
+    width: 100%;
+    height: 12px;
+    border-radius: 6px;
+    background-color: var(--progress-bg);
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-container span {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* 📌 User Info */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background-color: var(--profile-bg);
+    transition: background-color 0.3s, border 0.3s;
+}
+
+/* ⚙️ Profile & Logout Buttons */
+.user-info button {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.user-info button:hover {
+    background-color: var(--button-hover);
+    transform: scale(1.05);
+}
+
+/* 🎯 Light Mode Theme */
+:root {
+    --navbar-bg: #f8f9fa;
+    --text-color: #333;
+    --border-color: #222;
+    --profile-bg: #fff;
+    --button-bg: #007bff;
+    --button-hover: #0056b3;
+    --link-hover: #007bff;
+
+    /* Progress Bar */
+    --progress-bg: #e0e0e0;
+    --progress-fill: #28a745;
+}
+
+/* 🌙 Dark Mode Theme */
+.dark-theme {
+    --navbar-bg: #222;
+    --text-color: #f5f5f5;
+    --border-color: #ddd;
+    --profile-bg: #333;
+    --button-bg: #1a73e8;
+    --button-hover: #1664c4;
+    --link-hover: #1a73e8;
+
+    /* Progress Bar */
+    --progress-bg: #444;
+    --progress-fill: #4caf50;
+}
+
+/* 📊 Progress Bar Styling */
+progress {
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background-color: var(--progress-bg);
+    overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+    background-color: var(--progress-bg);
+    border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+    background-color: var(--progress-fill);
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+progress::-moz-progress-bar {
+    background-color: var(--progress-fill);
+    border-radius: 5px;
 }
 

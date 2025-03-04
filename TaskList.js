@@ -1,62 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask, removeTask, completeTask, setTaskFilter, updateTaskProgress, setLoading, updateTask, undoCompleteTask } from "../actions/taskActions";
-import { v4 as uuidv4 } from 'uuid';
+import { addTask, removeTask, completeTask, setTaskFilter, updateTaskProgress, updateTask, undoCompleteTask } from "../actions/taskActions";
+import { v4 as uuidv4 } from "uuid";
 import ActivityLog from "./ActivityLog";
+import Footer from "./footer";
+
+
 
 const TaskList = () => {
     const [taskName, setTaskName] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
     const [taskGoal, setTaskGoal] = useState(100);
-    const [progressInput, setProgressInput] = useState({}); // Stores live input state
+    const [taskDate, setTaskDate] = useState(new Date().toISOString().split("T")[0]);
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+    const [progressInput, setProgressInput] = useState({});
     const [showAddTask, setShowAddTask] = useState(false);
-    const [editingTask, setEditingTask] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [taskAnimation, setTaskAnimation] = useState({}); // Tracks animation state
-    const [notification, setNotifitcation] = useState(null);
+    const [notification, setNotification] = useState(null);
+    const [scrollOffset, setScrollOffset] = useState(0);
 
-    const tasks = useSelector(state => state.tasks.tasks);
-    const filterBy = useSelector(state => state.tasks.filterBy);
     const dispatch = useDispatch();
+    const tasks = useSelector(state => state.tasks.tasks);
 
-    // Show loading animation before displaying tasks
     useEffect(() => {
-        setLoading(true);
-        setTimeout(() => setLoading(false), 500);
-    }, []);
-
-    // Load tasks from localStorage
-    useEffect(() => {
-        const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        if (!localStorage.getItem('tasks_loaded') && savedTasks.length > 0) {
-            dispatch({ type: 'LOAD_TASKS', payload: savedTasks });
-            localStorage.setItem('tasks_loaded', true);
-        }
+        const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        dispatch({ type: "LOAD_TASKS", payload: savedTasks });
     }, [dispatch]);
 
-    // Save tasks to localStorage only when necessary
     useEffect(() => {
         if (tasks.length > 0) {
-            const savedTasks = JSON.stringify(tasks);
-            if (localStorage.getItem('tasks') !== savedTasks) {
-                localStorage.setItem('tasks', savedTasks);
-            }
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        } else {
+            localStorage.removeItem("tasks");
         }
     }, [tasks]);
 
-    // Prevent Hot Module Replacement from causing reloads
     useEffect(() => {
-        return () => {
-            console.log("Cleaning up old tasks on HMR update...");
-            localStorage.removeItem('tasks_loaded');
+        const handleScroll = () => {
+            setScrollOffset(window.scrollY);
         };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-
-    const showNotification = (message, type='sucess') => {
-        setNotifitcation({message, type});
-        setTimeout(() => setNotifitcation, 1500);
-    }
+    const showNotification = (message, type = "success") => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification(null), 1500);
+    };
 
     const handleAddTask = () => {
         if (taskName.trim()) {
@@ -65,159 +54,120 @@ const TaskList = () => {
                 name: taskName,
                 completed: false,
                 description: taskDescription,
-                goal: 100,
+                goal: taskGoal,
                 progress: 0,
                 createdAt: new Date().toLocaleString(),
-                updatedAt: new Date().toLocaleString()
+                scheduledDate: taskDate
             };
             dispatch(addTask(newTask));
             showNotification(`🎉 Task "${taskName}" added successfully!`);
             setTaskName('');
             setTaskDescription('');
+            setTaskGoal(100);
             setShowAddTask(false);
-        }else{
-            showNotification('❌ Task name cannot be empty!", "error"')
+        } else {
+            showNotification("❌ Task name cannot be empty!", "error");
         }
     };
 
-    const handleUpdateTask = () => {
-        if (editingTask) {
-            dispatch(updateTask(editingTask.id, { name: taskName, description: taskDescription, goal: taskGoal }));
-            setEditingTask(null);
-            setShowAddTask(false);
-        }
-    };
-
-    // Live update progress input and immediately update Redux
     const handleProgressUpdate = (id, value) => {
-        const newValue = Math.min(100, Math.max(0, value)); // Limit between 0-100%
-        setProgressInput(prev => ({ ...prev, [id]: newValue })); // Update input state
-        dispatch(updateTaskProgress(id, newValue)); // Update Redux immediately
-    };
-
-    // Handle task completion and undo with animation
-    const handleTaskAction = (id, action) => {
-        setTaskAnimation(prev => ({ ...prev, [id]: true }));
-        setTimeout(() => {
-            dispatch(action(id));
-            setTaskAnimation(prev => ({ ...prev, [id]: false }));
-        }, 400);
-    };
-
-    // Delete Task with Confirmation
-    const handleDeleteTask = (id) => {
-        if (window.confirm('Are you sure you want to delete this task?')) {
-            dispatch(removeTask(id));
-        }
-    };
-
-    // Assign colors based on task progress
-    const getTaskColor = (task) => {
-        if (task.completed) return 'task-completed';
-        if (task.progress >= 70) return 'task-high-progress';
-        if (task.progress >= 30) return 'task-medium-progress';
-        return 'task-low-progress';
-    };
-
-    // Task Item Component
-    const TaskItem = ({ task }) => {
-        return (
-            <li className={`task-item ${getTaskColor(task)} ${taskAnimation[task.id] ? 'fade-out' : ''}`}>
-                <div className="task-content">
-                    <h3>{task.name}</h3>
-                    <p>{task.description}</p>
-                    <small>📅 Created: {task.createdAt}</small>
-                    <small>🔄 Updated: {task.updatedAt}</small>
-
-                    {/* Progress Bar with % */}
-                    <div className="progress-container">
-                        <progress value={progressInput[task.id] ?? task.progress} max="100"></progress>
-                        <span className="progress-text">{progressInput[task.id] ?? task.progress}%</span>
-                    </div>
-
-                    {/* Progress Input */}
-                    <input
-                        type="number"
-                        placeholder="Progress"
-                        value={progressInput[task.id] ?? task.progress}
-                        max="100"
-                        min="0"
-                        onChange={(e) => handleProgressUpdate(task.id, Number(e.target.value))}
-                    />
-
-                    <div className="task-buttons">
-                        {task.completed ? (
-                            <button onClick={() => handleTaskAction(task.id, undoCompleteTask)}>⬅️ Undo</button>
-                        ) : (
-                            <button onClick={() => handleTaskAction(task.id, completeTask)}>➡️ Complete</button>
-                        )}
-                        <button onClick={() => {
-                            setTaskName(task.name);
-                            setTaskDescription(task.description);
-                            setEditingTask(task);
-                            setShowAddTask(true);
-                        }}>✏️ Edit</button>
-                        <button onClick={() => handleDeleteTask(task.id)}>❌ Delete</button>
-                    </div>
-                </div>
-            </li>
-        );
+        const newValue = Math.min(100, Math.max(0, value));
+        setProgressInput(prev => ({ ...prev, [id]: newValue }));
+        dispatch(updateTaskProgress(id, newValue));
     };
 
     return (
-        <div className="task-list-container">
-            {loading ? <div className="loading-spinner"></div> : (
-                <>
-                {notification && (
-                        <div className={`notification ${notification.type}`}>
-                            {notification.message}
-                        </div>
-                    )}
-                    <button className="add-task-button" onClick={() => setShowAddTask(true)}>+ Add Task</button>
-                    <ActivityLog />
-                    {showAddTask && (
-                        <div className="task-form">
-                            <input type="text" placeholder="Task Name" value={taskName}
-                                onChange={(e) => setTaskName(e.target.value)} />
-                            <textarea placeholder="Task Description" value={taskDescription}
-                                onChange={(e) => setTaskDescription(e.target.value)} />
-                            <input type="number" placeholder="Goal (e.g 100%)" value={taskGoal}
-                                onChange={(e) => setTaskGoal(Number(e.target.value))} />
+        <div className={`task-container ${showAddTask ? "blur-background" : ""}`} style={{ "--scroll-offset": `${scrollOffset}px` }}>
+            <ActivityLog />
 
-                            <button onClick={editingTask ? handleUpdateTask : handleAddTask}>
-                                {editingTask ? "Update Task" : "Add Task"}
-                            </button>
-                        </div>
-                    )}
+            {/* Add Task & Filter */}
+            <div className="task-controls">
+                <button className="add-task-button" onClick={() => setShowAddTask(true)}>➕ Add Task</button>
 
-                    <div className="task-filters">
-                        <button onClick={() => dispatch(setTaskFilter('all'))}>All</button>
-                        <button onClick={() => dispatch(setTaskFilter('active'))}>Active</button>
-                        <button onClick={() => dispatch(setTaskFilter('completed'))}>Completed</button>
-                    </div>
+                <label className="filter-label">Filter by Date:</label>
+                <input 
+                    type="date" 
+                    value={selectedDate} 
+                    onChange={(e) => setSelectedDate(e.target.value)} 
+                    className="filter-date"
+                />
+            </div>
 
-                    <div className="task-board">
-                        <div className="task-column">
-                            <h2>📌 Not Completed</h2>
-                            <ul>{tasks.filter(task => !task.completed).map(task => <TaskItem key={task.id} task={task} />)}</ul>
-                        </div>
-                        <div className="task-column">
-                            <h2>✅ Completed</h2>
-                            <ul>{tasks.filter(task => task.completed).map(task => <TaskItem key={task.id} task={task} />)}</ul>
+            {/* 📌 Add Task Modal */}
+            {showAddTask && (
+                <div className="task-modal" style={{ top: `calc(50% + ${scrollOffset}px)` }}>
+                    <div className="task-modal-content">
+                        <h3 className="task-modal-title">📝 Create a New Task</h3>
+                        
+                        <input type="text" placeholder="Task Name" value={taskName} onChange={(e) => setTaskName(e.target.value)} />
+
+                        <textarea placeholder="Task Description" value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)} />
+
+                        <label>📅 Schedule Task:</label>
+                        <input type="date" value={taskDate} onChange={(e) => setTaskDate(e.target.value)} />
+
+                        <label>🎯 Set Goal (%):</label>
+                        <input type="number" placeholder="100%" value={taskGoal} onChange={(e) => setTaskGoal(Number(e.target.value))} />
+
+                        {/* Buttons */}
+                        <div className="task-modal-buttons">
+                            <button className="save-task" onClick={handleAddTask}>✅ Save Task</button>
+                            <button className="cancel-task" onClick={() => setShowAddTask(false)}>❌ Cancel</button>
                         </div>
                     </div>
-                </>
+                </div>
             )}
+
+            {/* Task Board */}
+            <div className="task-board">
+                <div className="task-column">
+                    <h2>📌 Not Completed</h2>
+                    {tasks.filter(task => !task.completed).map(task => (
+                        <div key={task.id} className="task-item">
+                            <h3>{task.name}</h3>
+                            <p>{task.description}</p>
+                            <small>📅 Scheduled: {task.scheduledDate}</small>
+
+                           
+                            <div className="progress-container">
+                             
+                               <progress value={progressInput[task.id] ?? task.progress} max="100"></progress>
+                              <span className="progress-text">{progressInput[task.id] ?? task.progress}%</span>
+
+   
+                                 <input 
+                                type="number" 
+                                min="0" 
+                                max="100" 
+                                placeholder="Enter %"
+                                value={progressInput[task.id] ?? task.progress} 
+                                onChange={(e) => handleProgressUpdate(task.id, Number(e.target.value))}
+                                className="progress-input"
+                                           />
+                                       </div>
+
+                            <button onClick={() => dispatch(completeTask(task.id))}>✅ Complete</button>
+                            <button onClick={() => dispatch(removeTask(task.id))}>🗑 Delete</button>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="task-column">
+                    <h2>✅ Completed</h2>
+                    {tasks.filter(task => task.completed).map(task => (
+                        <div key={task.id} className="task-item task-completed">
+                            <h3>{task.name}</h3>
+                            <p>{task.description}</p>
+                            <small>📅 Scheduled: {task.scheduledDate}</small>
+                            <button onClick={() => dispatch(undoCompleteTask(task.id))}>🔄 Undo</button>
+                            <button onClick={() => dispatch(removeTask(task.id))}>🗑 Delete</button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <Footer/>
         </div>
     );
 };
 
 export default TaskList;
-
-
-/*
-filter tasks
-prevents empy tasks
-show user progress in tasks 
-
-*/

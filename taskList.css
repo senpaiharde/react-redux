@@ -1,216 +1,316 @@
-/* General Task List Container */
-.task-list-container {
-    max-width: 800px;
-    margin: 40px auto;
+/* Container Layout */
+.task-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
     padding: 20px;
-    background: var(--bg-color);
-    color: var(--text-color);
-    border-radius: 12px;
+}
+
+/* Activity Log */
+.activity-log {
+    width: 80%;
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s, color 0.3s;
-    animation: fadeIn 0.5s ease-in-out;
 }
 
-/*  Button Styling */
-button {
-    padding: 10px 15px;
+/* Add Task Button */
+.add-task-button {
+    width: 250px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #28a745;
+    color: white;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: transform 0.2s ease, background 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
 }
 
-button:hover {
+.add-task-button:hover {
+    background: #218838;
     transform: scale(1.05);
 }
 
-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/*  Loading Animation */
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-top: 5px solid #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/*  Fade-In Animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/*  Fade-Out Animation */
-.fade-out {
-    animation: fadeOut 0.4s ease-in-out;
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.9); }
-}
-
-/*  Task Form */
-.task-form {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.task-form input,
-.task-form textarea {
+/* Task Board (Two Columns) */
+.task-board {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+    max-width: 1000px;
 }
 
-/*  Task Item */
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Task Columns */
+.task-column {
+    background: rgba(0, 0, 0, 0.05);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 10px;
+    min-height: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+/* Column Titles */
+.task-column h2 {
+    text-align: center;
     margin-bottom: 10px;
-    transition: background 0.3s ease, transform 0.3s ease;
-    animation: slideIn 0.4s ease;
 }
 
-/*  Slide In Animation */
-@keyframes slideIn {
-    from { transform: translateY(-10px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+/* Task Item */
+.task-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
 }
 
-/* red Low Progress (0-30%) */
-.task-low-progress {
-    background-color: #ec4444;
+.task-item:hover {
+    transform: scale(1.02);
 }
 
-/* yellow Medium Progress (30-70%) */
-.task-medium-progress {
-    background-color: #f3c408;
-}
-
-/* green High Progress (70-100%) */
-.task-high-progress {
-    background-color: #6dd66d;
-}
-
-/*  Completed Tasks */
+/* Completed Tasks */
 .task-completed {
-    background-color: #6dd66d;
+    background: #c3e6cb;
     text-decoration: line-through;
-    opacity: 0.7;
 }
 
-/*  Progress Bar */
+/* Progress Bar */
+
+/* 🔹 Progress Bar Container */
 .progress-container {
     display: flex;
     align-items: center;
     gap: 10px;
     width: 100%;
+    margin-top: 5px;
+}
+
+/* 🔹 Progress Input Field */
+.progress-input {
+    width: 60px;
+    padding: 5px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border 0.2s ease-in-out;
+}
+
+.progress-input:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
 progress {
     flex-grow: 1;
     height: 15px;
     border-radius: 8px;
-    background: #eee;
     border: none;
+    transition: width 0.3s ease;
 }
 
+/*  Smooth Gradient from Red → Green */
 progress::-webkit-progress-bar {
     background: #ddd;
     border-radius: 8px;
 }
 
 progress::-webkit-progress-value {
-    background: #007bff;
+    background: linear-gradient(to right, #e74c3c 0%, #f39c12 50%, #2ecc71 100%);
     border-radius: 8px;
-    transition: width 0.3s ease;
 }
 
-/*  Progress Text */
-.progress-text {
+/* 🏆 Progress Percentage */
+.progress-container span {
     font-weight: bold;
     color: #333;
 }
 
-/*  Task Board */
-.task-board {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
 
-/*  Task Columns */
-.task-column {
-    flex: 1;
-    padding: 20px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.05);
-    min-height: 300px;
-    transition: background 0.3s ease;
-}
-
-/*  Task Filters */
-.task-filters {
+/* Filter Options */
+.filter-options {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     margin: 20px 0;
 }
 
-/*  Add Task Button */
-.add-task-button {
-    background: #28a745;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.add-task-button:hover {
-    background: #218838;
-}
-
-/*  Blur Effect for Filtering */
-.task-item.blur {
-    opacity: 0.4;
-    filter: blur(3px);
+.filter-options select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
 /* Dark Mode Support */
 .dark-theme {
-    --bg-color: #1e1e1e;
-    --text-color: white;
+    background: #121212;
+    color: white;
+}
+
+.dark-theme .task-column {
+    background: #1e1e1e;
+}
+
+.dark-theme .task-item {
+    background: #2a2a2a;
+    color: white;
+}
+
+.dark-theme .add-task-button {
+    background: #4caf50;
+}
+
+.dark-theme .add-task-button:hover {
+    background: #388e3c;
+}
+
+/* Task Controls (Button & Filter) */
+.task-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.add-task-button {
+    width: 300px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+    margin-bottom: 10px;
+}
+
+.add-task-button:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+
+/* Filter By Date */
+.filter-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.filter-date {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    text-align: center;
 }
 
 
+/* 🔹 Blur ONLY Background, Keep Modal Clear */
+.blur-background::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px); /* Blurs everything EXCEPT modal */
+    z-index: 0;
+}
 
+/* 🔹 Task Modal - Always Visible & Stays in Place */
+.task-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out forwards;
+    z-index: 10;
+}
+
+/* 🔹 Modal Content */
+.task-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 🔹 Scroll Behavior - Moves with Page */
+.task-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: top 0.3s ease-in-out;
+}
+
+/* 🔹 When Scrolling, Modal Moves with Scroll */
+@media screen and (min-height: 500px) {
+    .task-modal {
+        position: absolute;
+        top: calc(50% + var(--scroll-offset, 0px));
+    }
+}
+
+/* 🔹 Title */
+.task-modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 🔹 Inputs */
+.task-modal input,
+.task-modal textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* 🔹 Buttons */
+.task-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.save-task {
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-task {
+    background: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 🔹 Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
